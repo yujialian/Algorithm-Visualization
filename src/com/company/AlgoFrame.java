@@ -1,0 +1,101 @@
+package com.company;
+import javax.swing.*;
+import java.awt.*;
+
+/* 将实现算法的数据进行绘制.*/
+/*View.*/
+public class AlgoFrame extends JFrame {
+    private int canvasWidth;
+    private int canvasHeight;
+    private String selectedAlgo;
+    public AlgoFrame(String title, int canvasWidth, int canvasHeight, String selectedAlgo) {
+        super(title);
+        this.canvasHeight = canvasHeight;
+        this.canvasWidth = canvasWidth;
+        this.selectedAlgo = selectedAlgo;
+        AlgoCanvas canvas = new AlgoCanvas();
+        setContentPane(canvas);
+        /*Set current window's cohntent pane.*/
+        pack();
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setResizable(false);
+        setVisible(true);
+    }
+    public int getCanvasWidth() {
+        return canvasWidth;
+    }
+    public int getCanvasHeight() {
+        return canvasHeight;
+    }
+    private SelectionSortData dataSelection;
+    private InsertionSortData dataInsertion;
+    public void render(Object data) {
+        switch (selectedAlgo) {
+            case "SELECTION":
+                this.dataSelection = (SelectionSortData) data;
+                break;
+            case "QUICK":
+                break;
+            case "MERGE_BOTTOMUP":
+                break;
+            case "MERGE_TOPDOWN":
+                break;
+            case "INSERTION":
+                this.dataInsertion = (InsertionSortData) data;
+                break;
+            default:
+        }
+        this.repaint();
+    }
+    private class AlgoCanvas extends JPanel {
+        public AlgoCanvas() {
+            super(true);
+            /* Double buffered.*/
+            /* How to achieve double buffer from low level point of view? */
+        }
+        @Override
+        public void paintComponent(Graphics g) {
+            /* Painting context.*/
+            super.paintComponent(g);
+            Graphics2D g2d = (Graphics2D) g;
+            /* Anti-Aliased.*/
+            RenderingHints hints = new RenderingHints(
+                    RenderingHints.KEY_ANTIALIASING,
+                    RenderingHints.VALUE_ANTIALIAS_ON);
+            g2d.addRenderingHints(hints);
+            /* Drawing.*/
+            switch (selectedAlgo) {
+                case "SELECTION":
+                    int w = canvasWidth / dataSelection.N();
+                    for (int i = 0; i < dataSelection.N(); i++) {
+                        if (i < dataSelection.orderedIndex) {
+                            AlgoVisHelper.setColor(g2d, AlgoVisHelper.Red);
+                        } else {
+                            AlgoVisHelper.setColor(g2d, AlgoVisHelper.Grey);
+                        }
+                        if (i == dataSelection.currCompareIndex) {
+                            AlgoVisHelper.setColor(g2d, AlgoVisHelper.LightBlue);
+                        }
+                        if (i == dataSelection.currMinIndex) {
+                            AlgoVisHelper.setColor(g2d, AlgoVisHelper.Indigo);
+                        }
+                        AlgoVisHelper.fillRectangle(g2d, i * w, canvasHeight - dataSelection.get(i), w - 1, dataSelection.get(i));
+                    }
+                    break;
+                case "QUICK":
+                    break;
+                case "MERGE_BOTTOMUP":
+                    break;
+                case "MERGE_TOPDOWN":
+                    break;
+                case "INSERTION":
+                    break;
+                default:
+            }
+        }
+        @Override
+        public Dimension getPreferredSize() {
+            return new Dimension(canvasWidth, canvasHeight);
+        }
+    }
+}
