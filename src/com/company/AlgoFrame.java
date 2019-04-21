@@ -27,21 +27,19 @@ public class AlgoFrame extends JFrame {
     public int getCanvasHeight() {
         return canvasHeight;
     }
-    private SelectionSortData dataSelection;
-    private InsertionSortData dataInsertion;
-    public void render(Object data) {
+    private SortData data;
+    public void render(SortData data) {
         switch (selectedAlgo) {
             case "SELECTION":
-                this.dataSelection = (SelectionSortData) data;
+            case "INSERTION":
+            case "INSERTION_IMPROVED":
+                this.data = data;
                 break;
             case "QUICK":
                 break;
             case "MERGE_BOTTOMUP":
                 break;
             case "MERGE_TOPDOWN":
-                break;
-            case "INSERTION":
-                this.dataInsertion = (InsertionSortData) data;
                 break;
             default:
         }
@@ -63,23 +61,24 @@ public class AlgoFrame extends JFrame {
                     RenderingHints.KEY_ANTIALIASING,
                     RenderingHints.VALUE_ANTIALIAS_ON);
             g2d.addRenderingHints(hints);
+            int w = 0;
             /* Drawing.*/
             switch (selectedAlgo) {
                 case "SELECTION":
-                    int w = canvasWidth / dataSelection.N();
-                    for (int i = 0; i < dataSelection.N(); i++) {
-                        if (i < dataSelection.orderedIndex) {
+                    w = canvasWidth / data.N();
+                    for (int i = 0; i < data.N(); i++) {
+                        if (i < data.orderedIndex) {
                             AlgoVisHelper.setColor(g2d, AlgoVisHelper.Red);
                         } else {
                             AlgoVisHelper.setColor(g2d, AlgoVisHelper.Grey);
                         }
-                        if (i == dataSelection.currCompareIndex) {
+                        if (i == data.currCompareIndex) {
                             AlgoVisHelper.setColor(g2d, AlgoVisHelper.LightBlue);
                         }
-                        if (i == dataSelection.currMinIndex) {
+                        if (i == data.currMinIndex) {
                             AlgoVisHelper.setColor(g2d, AlgoVisHelper.Indigo);
                         }
-                        AlgoVisHelper.fillRectangle(g2d, i * w, canvasHeight - dataSelection.get(i), w - 1, dataSelection.get(i));
+                        AlgoVisHelper.fillRectangle(g2d, i * w, canvasHeight - data.get(i), w - 1, data.get(i));
                     }
                     break;
                 case "QUICK":
@@ -88,7 +87,21 @@ public class AlgoFrame extends JFrame {
                     break;
                 case "MERGE_TOPDOWN":
                     break;
+                case "INSERTION_IMPROVED":
                 case "INSERTION":
+                    w = canvasWidth / data.N();
+                    for (int i = 0; i < data.N(); i++) {
+                        if (i < data.orderedIndex) {
+                            AlgoVisHelper.setColor(g2d, AlgoVisHelper.Red);
+                        } else {
+                            AlgoVisHelper.setColor(g2d, AlgoVisHelper.Grey);
+                        }
+                        if (i == data.currCompareIndex) {
+                            AlgoVisHelper.setColor(g2d, AlgoVisHelper.LightBlue);
+                        }
+                        AlgoVisHelper.fillRectangle(g2d, i * w, canvasHeight - data.get(i), w - 1, data.get(i));
+
+                    }
                     break;
                 default:
             }

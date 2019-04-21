@@ -10,19 +10,19 @@ import java.awt.event.MouseEvent;
 /*Controller. Connect data layer and view layer.*/
 public class AlgoVisualizer {
     private int DEPLAY = 10;
-    private SelectionSortData data;
+    private SortData data;
     private String selectedAlgo;
     private AlgoFrame frame;
     private boolean isAnimated = true;
 
-    public AlgoVisualizer(int sceneWidth, int sceneHeight, int N, String selectedAlgo) {
+    public AlgoVisualizer(int sceneWidth, int sceneHeight, int N, String selectedAlgo, SortData.Type dataType) {
         /* Initialize data. */
-        data = new SelectionSortData(N, sceneHeight);
         this.selectedAlgo = selectedAlgo;
         // TODO: Initialize data
         /* Tasks on the event dispatch thread must finish quickly;
          * if they don't, unhandled events back up and the user interface becomes unresponsive.
          */
+        data = new SortData(N, sceneHeight, dataType);
         EventQueue.invokeLater(() -> {
             frame = new AlgoFrame("Welcome Algorithm visualization", sceneWidth, sceneHeight, selectedAlgo);
             frame.addKeyListener(new AlgoKeyListener());
@@ -32,29 +32,32 @@ public class AlgoVisualizer {
             }).start();
         });
     }
+    public AlgoVisualizer(int sceneWidth, int sceneHeight, int N, String selectedAlgo) {
+        this(sceneWidth, sceneHeight, N, selectedAlgo, SortData.Type.Default);
+    }
     private void run() {
         frame.render(data);
         AlgoVisHelper.pause(DEPLAY);
         switch (selectedAlgo) {
             case "SELECTION":
                 /* Selection sort minimize the swap operation, ONLY N TIMES.*/
-                setData(0, -1, -1);
+                setDataSelection(0, -1, -1);
                 for (int i = 0; i < data.N(); i++) {
                     int minIndex = i;
-                    setData(i, -1, minIndex);
+                    setDataSelection(i, -1, minIndex);
                     for (int j = i + 1; j < data.N(); j++) {
-                        setData(i, j, minIndex);
+                        setDataSelection(i, j, minIndex);
                         if (data.get(j) < data.get(minIndex)) {
                             minIndex = j;
-                            setData(i, j, minIndex);
+                            setDataSelection(i, j, minIndex);
                         }
                     }
                     data.swap(minIndex, i);
-                    setData(i + 1, -1,-1);
+                    setDataSelection(i + 1, -1,-1);
                     frame.render(data);
                     AlgoVisHelper.pause(DEPLAY);
                 }
-                setData(data.N(), -1, -1);
+                setDataSelection(data.N(), -1, -1);
                 //TOBE implemented
                 break;
             case "QUICK":
@@ -66,12 +69,42 @@ public class AlgoVisualizer {
             case "MERGE_TOPDOWN":
                 //TOBE implemented
                 break;
+            case "INSERTION_IMPROVED":
+                setDataInsertion(0, -1);
+                for (int i = 0; i < data.N(); i++) {
+                    setDataInsertion(i, i);
+                    int currData = data.get(i);
+                    int j = i;
+                    for (j = i; j > 0 && data.get(j - 1) > currData; j--) {
+                        /*No swap.*/
+                        data.set(j, data.get(j - 1));
+                        setDataInsertion(i + 1, j-1);
+                    }
+                    data.set(j, currData);
+                    setDataInsertion(j, i);
+                }
+                setDataInsertion(data.N(), -1);
+                break;
             case "INSERTION":
+                setDataInsertion(0, -1);
+                for (int i = 0; i < data.N(); i++) {
+                    for (int j = i; j > 0 && data.get(j - 1) > data.get(j); j--) {
+                        data.swap(j, j - 1);
+                        setDataInsertion(i + 1, j-1);
+                    }
+                }
+                setDataInsertion(data.N(), -1);
                 break;
             default:
         }
     }
-    private void setData(int orderedIndex, int compareIndex, int currMinIndex) {
+    private void setDataInsertion(int orderedIndex, int currentIndex){
+        data.orderedIndex = orderedIndex;
+        data.currCompareIndex = currentIndex;
+        frame.render(data);
+        AlgoVisHelper.pause(DEPLAY);
+    }
+    private void setDataSelection(int orderedIndex, int compareIndex, int currMinIndex) {
         data.currCompareIndex = compareIndex;
         data.orderedIndex = orderedIndex;
         data.currMinIndex = currMinIndex;
@@ -103,7 +136,8 @@ public class AlgoVisualizer {
         int N = 100;
         int sceneWidth = 800;
         int sceneHeight = 800;
-        AlgoVisualizer visualizer = new AlgoVisualizer(sceneWidth, sceneHeight, N, "SELECTION");
-        //AlgoVisualizer visualizer = new AlgoVisualizer(sceneWidth, sceneHeight, N, "INSERTION");
+        //AlgoVisualizer visualizer = new AlgoVisualizer(sceneWidth, sceneHeight, N, "SELECTION");
+        //AlgoVisualizer visualizer = new AlgoVisualizer(sceneWidth, sceneHeight, N, "INSERTION", SortData.Type.NearlyOrdered);
+        AlgoVisualizer visualizer = new AlgoVisualizer(sceneWidth, sceneHeight, N, "INSERTION_IMPROVED", SortData.Type.NearlyOrdered);
     }
 }
