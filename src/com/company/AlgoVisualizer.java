@@ -70,6 +70,8 @@ public class AlgoVisualizer {
                 //TOBE implemented
                 break;
             case "INSERTION_IMPROVED":
+                /* For nearly ordered array, insertion sort is o(n).*/
+                /* For O(n)^2 algorithm, but 2*n^2 and 12*n^2's difference is huge.*/
                 setDataInsertion(0, -1);
                 for (int i = 0; i < data.N(); i++) {
                     setDataInsertion(i, i);
