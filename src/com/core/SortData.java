@@ -1,4 +1,4 @@
-package com.company;
+package com.core;
 import java.util.Arrays;
 
 public class SortData {

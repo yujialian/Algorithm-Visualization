@@ -1,4 +1,4 @@
-package com.company;
+package com.core;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.*;

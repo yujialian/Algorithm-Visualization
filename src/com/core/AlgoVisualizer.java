@@ -1,4 +1,4 @@
-package com.company;
+package com.core;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -71,7 +71,8 @@ public class AlgoVisualizer {
                 break;
             case "INSERTION_IMPROVED":
                 /* For nearly ordered array, insertion sort is o(n).*/
-                /* For O(n)^2 algorithm, but 2*n^2 and 12*n^2's difference is huge.*/
+                /* For O(n)^2 algorithm, but 2*n^2 and 12*n^2's difference is huge, insertion sort's constant is smaller.*/
+                /* For smaller n, insertion sort has advantage over some nlogn algorithms.*/
                 setDataInsertion(0, -1);
                 for (int i = 0; i < data.N(); i++) {
                     setDataInsertion(i, i);
@@ -138,8 +139,8 @@ public class AlgoVisualizer {
         int N = 100;
         int sceneWidth = 800;
         int sceneHeight = 800;
-        //AlgoVisualizer visualizer = new AlgoVisualizer(sceneWidth, sceneHeight, N, "SELECTION");
-        //AlgoVisualizer visualizer = new AlgoVisualizer(sceneWidth, sceneHeight, N, "INSERTION", SortData.Type.NearlyOrdered);
-        AlgoVisualizer visualizer = new AlgoVisualizer(sceneWidth, sceneHeight, N, "INSERTION_IMPROVED", SortData.Type.NearlyOrdered);
+        //new AlgoVisualizer(sceneWidth, sceneHeight, N, "SELECTION");
+        //new AlgoVisualizer(sceneWidth, sceneHeight, N, "INSERTION", SortData.Type.NearlyOrdered);
+        new AlgoVisualizer(sceneWidth, sceneHeight, N, "INSERTION_IMPROVED", SortData.Type.NearlyOrdered);
     }
 }
