@@ -6,10 +6,12 @@ public class SortData {
         Default,
         NearlyOrdered
     }
-    private int[] numbers;
+    public int[] numbers;
     public int orderedIndex = -1; //[0 ... ORDERED IDNEX)
     public int currMinIndex = -1; // Current min index
     public int currCompareIndex = -1;
+    public int l, r; //Merge quick sort process section
+    public int mergeIndex;
     public SortData(int N, int randomBound, Type dataType) {
         numbers = new int[N];
         for (int i = 0; i < N; i++) {
@@ -36,6 +38,9 @@ public class SortData {
         return numbers[index];
     }
     public void swap(int i, int j) {
+        if (i < 0 || i >= numbers.length || j < 0 || j >= numbers.length) {
+            throw new IndexOutOfBoundsException();
+        }
         int tmp = numbers[i];
         numbers[i] = numbers[j];
         numbers[j] = tmp;

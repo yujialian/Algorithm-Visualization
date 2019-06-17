@@ -58,7 +58,6 @@ public class AlgoVisualizer {
                     AlgoVisHelper.pause(DEPLAY);
                 }
                 setDataSelection(data.N(), -1, -1);
-                //TOBE implemented
                 break;
             case "QUICK":
                 //TOBE implemented
@@ -67,7 +66,9 @@ public class AlgoVisualizer {
                 //TOBE implemented
                 break;
             case "MERGE_TOPDOWN":
-                //TOBE implemented
+                setDataMergeSort(-1, -1,-1);
+                __mergeSort(0, data.N() - 1);
+                setDataMergeSort(0, data.N() - 1, data.N() - 1);
                 break;
             case "INSERTION_IMPROVED":
                 /* For nearly ordered array, insertion sort is o(n).*/
@@ -114,6 +115,13 @@ public class AlgoVisualizer {
         frame.render(data);
         AlgoVisHelper.pause(DEPLAY);
     }
+    private void setDataMergeSort(int l, int r, int mergeIndex) {
+        data.l = l;
+        data.r = r;
+        data.mergeIndex = mergeIndex;
+        frame.render(data);
+        AlgoVisHelper.pause(DEPLAY);
+    }
     private class AlgoKeyListener extends KeyAdapter {
         @Override
         public void keyReleased(KeyEvent e) {
@@ -131,6 +139,39 @@ public class AlgoVisualizer {
             System.out.println(e.getPoint());
         }
     }
+    private void __mergeSort(int l, int r) {
+        if (l >= r) return;
+        setDataMergeSort(l, r, -1);
+        int mid = l + (r - l) / 2;
+        __mergeSort(l, mid);
+        __mergeSort(mid + 1, r);
+        __merge(l, mid, r);
+    }
+    private void __merge(int l, int mid, int r) {
+        int[] aux = new int[r - l + 1];
+        for (int i = l; i <= r; i++) {
+            aux[i - l] = data.numbers[i];
+        }
+        int index = l;
+        int left = l;
+        int right = mid + 1;
+        while (index <= r) {
+            if (left > mid) {
+                data.numbers[index++] = aux[right - l];
+                right++;
+            } else if (right > r) {
+                data.numbers[index++] = aux[left - l];
+                left++;
+            } else if (aux[left - l] > aux[right - l]) {
+                data.numbers[index++] = aux[right - l];
+                right++;
+            } else {
+                data.numbers[index++] = aux[left - l];
+                left++;
+            }
+            setDataMergeSort(l, r, index);
+        }
+    }
     public static void main(String[] args) {
         // write your code here
         /* Put JUI thread into a new thread
@@ -141,6 +182,7 @@ public class AlgoVisualizer {
         int sceneHeight = 800;
         //new AlgoVisualizer(sceneWidth, sceneHeight, N, "SELECTION");
         //new AlgoVisualizer(sceneWidth, sceneHeight, N, "INSERTION", SortData.Type.NearlyOrdered);
-        new AlgoVisualizer(sceneWidth, sceneHeight, N, "INSERTION_IMPROVED", SortData.Type.NearlyOrdered);
+        //new AlgoVisualizer(sceneWidth, sceneHeight, N, "INSERTION_IMPROVED", SortData.Type.NearlyOrdered);
+        new AlgoVisualizer(sceneWidth, sceneHeight, N, "MERGE_TOPDOWN", SortData.Type.Default);
     }
 }

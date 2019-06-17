@@ -40,6 +40,7 @@ public class AlgoFrame extends JFrame {
             case "MERGE_BOTTOMUP":
                 break;
             case "MERGE_TOPDOWN":
+                this.data = data;
                 break;
             default:
         }
@@ -86,6 +87,18 @@ public class AlgoFrame extends JFrame {
                 case "MERGE_BOTTOMUP":
                     break;
                 case "MERGE_TOPDOWN":
+                    w = canvasWidth / data.N();
+                    for (int i = 0; i < data.N(); i++) {
+                        if (i > data.l && i <= data.r) {
+                            AlgoVisHelper.setColor(g2d, AlgoVisHelper.Green);
+                        } else {
+                            AlgoVisHelper.setColor(g2d, AlgoVisHelper.Grey);
+                        }
+                        if (i >= data.l && i <= data.mergeIndex) {
+                            AlgoVisHelper.setColor(g2d, AlgoVisHelper.Red);
+                        }
+                        AlgoVisHelper.fillRectangle(g2d, i * w, canvasHeight - data.get(i), w - 1, data.get(i));
+                    }
                     break;
                 case "INSERTION_IMPROVED":
                 case "INSERTION":
