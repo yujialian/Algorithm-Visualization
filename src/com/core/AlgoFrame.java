@@ -38,6 +38,7 @@ public class AlgoFrame extends JFrame {
             case "QUICK":
                 break;
             case "MERGE_BOTTOMUP":
+                this.data = data;
                 break;
             case "MERGE_TOPDOWN":
                 this.data = data;
@@ -85,7 +86,6 @@ public class AlgoFrame extends JFrame {
                 case "QUICK":
                     break;
                 case "MERGE_BOTTOMUP":
-                    break;
                 case "MERGE_TOPDOWN":
                     w = canvasWidth / data.N();
                     for (int i = 0; i < data.N(); i++) {

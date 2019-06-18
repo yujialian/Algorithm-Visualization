@@ -63,7 +63,10 @@ public class AlgoVisualizer {
                 //TOBE implemented
                 break;
             case "MERGE_BOTTOMUP":
-                //TOBE implemented
+                /*Bottom up, don't need access elements using index, good for LinkedList sort.*/
+                setDataMergeSort(-1, -1, -1);
+                _mergeSortBottomUp();
+                setDataMergeSort(0, data.N() - 1, data.N() - 1);
                 break;
             case "MERGE_TOPDOWN":
                 setDataMergeSort(-1, -1,-1);
@@ -147,6 +150,13 @@ public class AlgoVisualizer {
         __mergeSort(mid + 1, r);
         __merge(l, mid, r);
     }
+    private void _mergeSortBottomUp() {
+        for (int sz = 1; sz <= data.numbers.length; sz *= 2) {
+            for (int i = 0; i < data.numbers.length; i += sz + sz) {
+                __merge(i, i + sz - 1, Math.min(i + sz + sz - 1, data.numbers.length - 1));
+            }
+        }
+    }
     private void __merge(int l, int mid, int r) {
         int[] aux = new int[r - l + 1];
         for (int i = l; i <= r; i++) {
@@ -183,6 +193,7 @@ public class AlgoVisualizer {
         //new AlgoVisualizer(sceneWidth, sceneHeight, N, "SELECTION");
         //new AlgoVisualizer(sceneWidth, sceneHeight, N, "INSERTION", SortData.Type.NearlyOrdered);
         //new AlgoVisualizer(sceneWidth, sceneHeight, N, "INSERTION_IMPROVED", SortData.Type.NearlyOrdered);
-        new AlgoVisualizer(sceneWidth, sceneHeight, N, "MERGE_TOPDOWN", SortData.Type.Default);
+        //new AlgoVisualizer(sceneWidth, sceneHeight, N, "MERGE_TOPDOWN", SortData.Type.Default);
+        new AlgoVisualizer(sceneWidth, sceneHeight, N, "MERGE_BOTTOMUP", SortData.Type.Default);
     }
 }
