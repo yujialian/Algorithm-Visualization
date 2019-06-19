@@ -59,8 +59,28 @@ public class AlgoVisualizer {
                 }
                 setDataSelection(data.N(), -1, -1);
                 break;
-            case "QUICK":
+            case "QUICKSORT_IMPROVE":
                 //TOBE implemented
+                break;
+            case "QUICKSORT":
+                //TOBE implemented
+                setDataQuickSort(-1, -1, -1, -1, -1);
+                /*
+                System.out.print("Before quick sort:");
+                for (int i = 0; i < data.N(); i++) {
+                    System.out.print(" " + data.get(i));
+                }
+                System.out.println();
+                */
+                __quickSort(0, data.N() - 1);
+                /*
+                System.out.print("After quick sort:");
+                for (int i = 0; i < data.N(); i++) {
+                    System.out.print(" " + data.get(i));
+                }
+                System.out.println();
+                */
+                setDataQuickSort(-1, -1, -1, -1, -1);
                 break;
             case "MERGE_BOTTOMUP":
                 /*Bottom up, don't need access elements using index, good for LinkedList sort.*/
@@ -125,6 +145,17 @@ public class AlgoVisualizer {
         frame.render(data);
         AlgoVisHelper.pause(DEPLAY);
     }
+    private void setDataQuickSort(int l, int r, int fixedPivot, int curPivot, int curElement) {
+        data.l = l;
+        data.r = r;
+        if (fixedPivot != -1) {
+            data.fixedPivots[fixedPivot] = true;
+        }
+        data.currentPivot = curPivot;
+        data.currentElement = curElement;
+        frame.render(data);
+        AlgoVisHelper.pause(DEPLAY);
+    }
     private class AlgoKeyListener extends KeyAdapter {
         @Override
         public void keyReleased(KeyEvent e) {
@@ -182,6 +213,31 @@ public class AlgoVisualizer {
             setDataMergeSort(l, r, index);
         }
     }
+    public void __quickSort(int l, int r) {
+        if (l > r) return;
+        if (l == r) {
+            setDataQuickSort(l, r, l, -1, -1);
+        }
+        int p = __partition(l, r);
+        __quickSort(l, p - 1);
+        __quickSort(p + 1, r);
+    }
+    public int __partition (int l, int r) {
+        int pivot = data.numbers[l];
+        setDataQuickSort(l, r, -1, l, -1);
+        int j = l;
+        for (int i = l + 1; i <= r; i++) {
+            setDataQuickSort(l, r, -1, l, i);
+            if (data.numbers[i] < pivot) {
+                data.swap(j + 1, i);
+                j++;
+                setDataQuickSort(l, r, -1, l, i);
+            }
+        }
+        data.swap(l, j);
+        setDataQuickSort(l, r, j, -1, -1);
+        return j;
+    }
     public static void main(String[] args) {
         // write your code here
         /* Put JUI thread into a new thread
@@ -194,6 +250,7 @@ public class AlgoVisualizer {
         //new AlgoVisualizer(sceneWidth, sceneHeight, N, "INSERTION", SortData.Type.NearlyOrdered);
         //new AlgoVisualizer(sceneWidth, sceneHeight, N, "INSERTION_IMPROVED", SortData.Type.NearlyOrdered);
         //new AlgoVisualizer(sceneWidth, sceneHeight, N, "MERGE_TOPDOWN", SortData.Type.Default);
-        new AlgoVisualizer(sceneWidth, sceneHeight, N, "MERGE_BOTTOMUP", SortData.Type.Default);
+        //new AlgoVisualizer(sceneWidth, sceneHeight, N, "MERGE_BOTTOMUP", SortData.Type.Default);
+        new AlgoVisualizer(sceneWidth, sceneHeight, N, "QUICKSORT", SortData.Type.Default);
     }
 }

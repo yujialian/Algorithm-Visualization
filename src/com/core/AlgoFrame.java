@@ -29,22 +29,7 @@ public class AlgoFrame extends JFrame {
     }
     private SortData data;
     public void render(SortData data) {
-        switch (selectedAlgo) {
-            case "SELECTION":
-            case "INSERTION":
-            case "INSERTION_IMPROVED":
-                this.data = data;
-                break;
-            case "QUICK":
-                break;
-            case "MERGE_BOTTOMUP":
-                this.data = data;
-                break;
-            case "MERGE_TOPDOWN":
-                this.data = data;
-                break;
-            default:
-        }
+        this.data = data;
         this.repaint();
     }
     private class AlgoCanvas extends JPanel {
@@ -83,7 +68,25 @@ public class AlgoFrame extends JFrame {
                         AlgoVisHelper.fillRectangle(g2d, i * w, canvasHeight - data.get(i), w - 1, data.get(i));
                     }
                     break;
-                case "QUICK":
+                case "QUICKSORT":
+                    w = canvasWidth / data.N();
+                    for (int i = 0; i < data.N(); i++) {
+                        if (i >= data.l && i <= data.r) {
+                            AlgoVisHelper.setColor(g2d, AlgoVisHelper.Green);
+                        } else {
+                            AlgoVisHelper.setColor(g2d, AlgoVisHelper.Grey);
+                        }
+                        if (i == data.currentPivot) {
+                            AlgoVisHelper.setColor(g2d, AlgoVisHelper.Indigo);
+                        }
+                        if (i == data.currentElement) {
+                            AlgoVisHelper.setColor(g2d, AlgoVisHelper.LightBlue);
+                        }
+                        if (data.fixedPivots[i]) {
+                            AlgoVisHelper.setColor(g2d, AlgoVisHelper.Red);
+                        }
+                        AlgoVisHelper.fillRectangle(g2d, i * w, canvasHeight - data.get(i), w - 1, data.get(i));
+                    }
                     break;
                 case "MERGE_BOTTOMUP":
                 case "MERGE_TOPDOWN":

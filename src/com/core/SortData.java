@@ -12,10 +12,15 @@ public class SortData {
     public int currCompareIndex = -1;
     public int l, r; //Merge quick sort process section
     public int mergeIndex;
+    public int currentPivot;
+    public int currentElement;
+    public boolean[] fixedPivots;//All the elements on the left side < pivot, all the elements on the right side > pivot.
     public SortData(int N, int randomBound, Type dataType) {
         numbers = new int[N];
+        fixedPivots = new boolean[N];
         for (int i = 0; i < N; i++) {
             numbers[i] = (int) (Math.random() * randomBound) + 1;
+            fixedPivots[i] = false;
         }
         if (dataType == Type.NearlyOrdered) {
             Arrays.sort(numbers);
