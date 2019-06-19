@@ -218,11 +218,39 @@ public class AlgoVisualizer {
         if (l == r) {
             setDataQuickSort(l, r, l, -1, -1);
         }
-        int p = __partition(l, r);
+        //int p = __partition(l, r);
+        int p = __partition_2_way(l, r);
         __quickSort(l, p - 1);
         __quickSort(p + 1, r);
     }
+    public int __partition_2_way (int l, int r) {
+        setDataQuickSort(l, r, -1, -1, -1);
+        data.swap(l, (int) (Math.random() * (r - l +1)) + l);
+        setDataQuickSort(l, r, -1, l, -1);
+        int p1 = l + 1;
+        int p2 = r;
+        int pivot = data.get(l);
+        while (true) {
+            while(p1 <= r && data.get(p1) <= pivot) {
+                setDataQuickSort(l, r, -1, l, p1);
+                p1++;
+            }
+            while(p2 >= l + 1 && data.get(p2) >= pivot) {
+                setDataQuickSort(l, r, -1, l, p2);
+                p2--;
+            }
+            if (p1 >= p2) break;
+            data.swap(p1, p2);
+            p1++;
+            p2--;
+        }
+        data.swap(p2, l);
+        setDataQuickSort(l, r, p2, -1, -1);
+        return p2;
+    }
     public int __partition (int l, int r) {
+        /*For majority of the element is different from each other.*/
+        data.swap(l, (int) (Math.random() * (r - l + 1)) + l);
         int pivot = data.numbers[l];
         setDataQuickSort(l, r, -1, l, -1);
         int j = l;
@@ -243,8 +271,8 @@ public class AlgoVisualizer {
         /* Put JUI thread into a new thread
             called: event distribute thread (Dispatcher)
          */
-        int N = 100;
-        int sceneWidth = 800;
+        int N = 300;
+        int sceneWidth = 1200;
         int sceneHeight = 800;
         //new AlgoVisualizer(sceneWidth, sceneHeight, N, "SELECTION");
         //new AlgoVisualizer(sceneWidth, sceneHeight, N, "INSERTION", SortData.Type.NearlyOrdered);
@@ -252,5 +280,6 @@ public class AlgoVisualizer {
         //new AlgoVisualizer(sceneWidth, sceneHeight, N, "MERGE_TOPDOWN", SortData.Type.Default);
         //new AlgoVisualizer(sceneWidth, sceneHeight, N, "MERGE_BOTTOMUP", SortData.Type.Default);
         new AlgoVisualizer(sceneWidth, sceneHeight, N, "QUICKSORT", SortData.Type.Default);
+        //new AlgoVisualizer(sceneWidth, sceneHeight, N, "QUICKSORT", SortData.Type.NearlyOrdered);
     }
 }
