@@ -219,11 +219,43 @@ public class AlgoVisualizer {
             setDataQuickSort(l, r, l, -1, -1);
         }
         //int p = __partition(l, r);
-        int p = __partition_2_way(l, r);
+        //int p = __partition_2_way(l, r);
+        int p = __partition_3_way(l, r);
         __quickSort(l, p - 1);
         __quickSort(p + 1, r);
     }
+
+    public int __partition_3_way(int l, int r) {
+        data.swap(l, (int) (Math.random() * (r - l + 1)) + l);
+        /* Let's say i is the element we currently in process
+        arr[l + 1 ... lt] < v
+        arr[gt ... r] > v
+        arr[lt + 1...i - 1] == v. */
+        int pivot = l;
+        int lt = l;
+        int bt = r + 1;
+        int i = l + 1;
+        setDataQuickSort(l, r, -1, l, -1);
+        while(i < bt) {
+            setDataQuickSort(l, r, -1, -1, i);
+            if (data.get(i) > data.get(pivot)) {
+                data.swap(i, --bt);
+            } else if (data.get(i) < data.get(pivot)) {
+                data.swap(i++, ++lt);
+                setDataQuickSort(l, r, -1, l, i);
+            } else {
+                i++;
+                setDataQuickSort(l, r, -1, l, i);
+            }
+        }
+        data.swap(pivot, lt);
+        setDataQuickSort(l, r, lt, -1, i);
+        return lt;
+    }
+
     public int __partition_2_way (int l, int r) {
+        /*Quick sort partition 2 way. */
+        /*Evenly distributed the elements even majority of them are same. */
         setDataQuickSort(l, r, -1, -1, -1);
         data.swap(l, (int) (Math.random() * (r - l +1)) + l);
         setDataQuickSort(l, r, -1, l, -1);
